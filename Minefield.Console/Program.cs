@@ -32,7 +32,7 @@
             IServiceCollection services = new ServiceCollection();
 
             // Register dependencies.
-            services.AddSingleton<IGridService, GridService>();
+            services.AddTransient<IGridService, GridService>();
             services.AddTransient<MinefieldViewModel>();
             services.AddTransient<MinefieldApp>();
 
