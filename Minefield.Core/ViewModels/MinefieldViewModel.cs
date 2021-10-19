@@ -18,6 +18,12 @@
             GridService = gridService;
             MoveCommand = new DelegateCommand<DirectionParam>(Move);
 
+            // Custom difficulty settings.
+            GridService.Lives = 3;
+            GridService.GridDimensions = 8;
+            GridService.MineFrequencyPercentage = 15;
+
+            // Setup grid.
             GridService.Setup(showMineLocations: true);
         }
 

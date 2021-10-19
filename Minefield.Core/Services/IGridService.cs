@@ -42,6 +42,11 @@
         int GridDimensions { get; set; }
 
         /// <summary>
+        /// How often mines appear as a percentage.
+        /// </summary>
+        int MineFrequencyPercentage { get; set; }
+
+        /// <summary>
         /// Player position.
         /// </summary>
         (int, int) PlayerPosition { get; }
