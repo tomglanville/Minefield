@@ -158,7 +158,7 @@
                 _moves++;
 
                 // Check win/lose conditions.
-                CheckForWinConditionOrMineHit(movementDirection);
+                CheckForWinAndLoseConditions(movementDirection);
                 return true;
             }
             else
@@ -173,19 +173,8 @@
         /// Check if player has reached the end of grid or if they have hit a mine.
         /// </summary>
         /// <param name="movementDirection">Movement direction.</param>
-        private void CheckForWinConditionOrMineHit(MovementDirection movementDirection)
+        private void CheckForWinAndLoseConditions(MovementDirection movementDirection)
         {
-            // Player has reached the end of the grid.
-            var gameWon = _playerPosition.positionX >= GridDimensions;
-
-            if (gameWon)
-            {
-                var livesText = Lives > 1 ? "lives" : "life";
-                Console.WriteLine("Congratulations you reached the end of the grid in " + Moves + " moves! You had " + Lives + " " + livesText + " left.");
-                GameOver = true;
-                return;
-            }
-
             // Does mine locations contain player position.
             var mineHit = MineLocations.Contains(_playerPosition);
 
@@ -194,6 +183,18 @@
             if (mineHit)
             {
                 LoseLife();
+            }
+
+            // Check if player has reached the end of the grid.
+            // Ensure that they didn't lose final life above by checking gameOver is still false.
+            var gameWon = _playerPosition.positionX >= GridDimensions && GameOver == false;
+
+            if (gameWon)
+            {
+                var livesText = Lives > 1 ? "lives" : "life";
+                Console.WriteLine("Congratulations you reached the end of the grid in " + Moves + " moves! You had " + Lives + " " + livesText + " left.");
+                GameOver = true;
+                return;
             }
         }
 
