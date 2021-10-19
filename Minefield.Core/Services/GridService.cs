@@ -11,14 +11,9 @@
     public class GridService : IGridService
     {
         /// <summary>
-        /// Gives the player some hints!
-        /// </summary>
-        private bool _showMineLocations;
-
-        /// <summary>
         /// The players current position coordinates.
         /// </summary>
-        private (int, int) _playerPosition = (0, 0);
+        private (int positionX, int positionY) _playerPosition = (0, 0);
 
         /// <summary>
         /// Number of moves.
@@ -48,7 +43,7 @@
         /// <summary>
         /// List of mine location coordinates
         /// </summary>
-        public List<(int, int)> MineLocations { get; set; } = new List<(int, int)>();
+        public List<(int, int)> MineLocations { get; set; } = new List<(int mineX, int mineY)>();
 
         /// <summary>
         /// Current number of lives.
@@ -60,6 +55,9 @@
         /// </summary>
         public bool GameOver { get; set; }
 
+        /// <summary>
+        /// Grid service.
+        /// </summary>
         public GridService()
         {
             // Default settings.
@@ -74,21 +72,20 @@
         /// <param name="showMineLocations">Show mine location spoilers.</param>
         public void Setup(bool showMineLocations)
         {
-            _showMineLocations = showMineLocations;
-
-            SetupMineLocations();
+            SetupMineLocations(showMineLocations);
         }
 
         /// <summary>
         /// Setup mine locations.
         /// </summary>
-        private void SetupMineLocations()
+        /// <param name="showMineLocations">Show player mine location hints.</param>
+        private void SetupMineLocations(bool showMineLocations = false)
         {
             // Loop across grid rows.
-            for (int i = 0; i < GridDimensions; i++)
+            for (int x = 0; x < GridDimensions; x++)
             {
                 // Loop down grid column.
-                for (int j = 0; j < GridDimensions; j++)
+                for (int y = 0; y < GridDimensions; y++)
                 {
                     // Randomly add a mine based on frequency.
                     var isMine = new Random().Next(0, 100) < MineFrequencyPercentage;
@@ -96,11 +93,11 @@
                     if (isMine)
                     {
                         // Add to mine locations.
-                        MineLocations.Add((i, j));
+                        MineLocations.Add((x, y));
 
                         // Show hint to player.
-                        if (_showMineLocations)
-                            Console.WriteLine("Spoiler: Added mine at (" + i + "," + j + ")");
+                        if (showMineLocations)
+                            Console.WriteLine("Spoiler: Added mine at (" + x + "," + y + ")");
                     }
                 }
             }
@@ -116,46 +113,47 @@
             if (GameOver)
                 return false;
 
-            var canMove = true;
+            var canMove = false;
 
             // Ensure player doesn't move outside of grid.
             switch (movementDirection)
             {
                 case MovementDirection.Up:
-                    canMove = (_playerPosition.Item2 - 1) >= 0;
+                    canMove = (_playerPosition.positionY - 1) >= 0;
 
                     // Update player positon.
                     if (canMove)
-                        _playerPosition.Item2--;
+                        _playerPosition.positionY--;
                     break;
 
                 case MovementDirection.Down:
-                    canMove = (_playerPosition.Item2 + 1) <= GridDimensions;
+                    canMove = (_playerPosition.positionY + 1) <= GridDimensions;
 
                     // Update player positon.
                     if (canMove)
-                        _playerPosition.Item2++;
+                        _playerPosition.positionY++;
                     break;
 
                 case MovementDirection.Left:
-                    canMove = (_playerPosition.Item1 - 1) >= 0;
+                    canMove = (_playerPosition.positionX - 1) >= 0;
 
                     // Update player positon.
                     if (canMove)
-                        _playerPosition.Item1--;
+                        _playerPosition.positionX--;
                     break;
 
                 case MovementDirection.Right:
-                    canMove = (_playerPosition.Item1 + 1) <= GridDimensions;
+                    canMove = (_playerPosition.positionX + 1) <= GridDimensions;
 
                     // Update player positon.
                     if (canMove)
-                        _playerPosition.Item1++;
+                        _playerPosition.positionX++;
                     break;
             }
 
             if (canMove)
             {
+                // Add to moves.
                 _moves++;
 
                 // Check win/lose conditions.
@@ -165,7 +163,7 @@
             else
             {
                 // Warn player.
-                Console.WriteLine("Unable to move off grid! Current position (" + _playerPosition.Item1 + ", " + _playerPosition.Item2 + ")");
+                Console.WriteLine("Unable to move off grid! Current position (" + _playerPosition.positionX + ", " + _playerPosition.positionY + ")");
                 return false;
             }
         }
@@ -176,7 +174,8 @@
         /// <param name="movementDirection">Movement direction.</param>
         private void CheckForWinConditionOrMineHit(MovementDirection movementDirection)
         {
-            var gameWon = _playerPosition.Item1 >= GridDimensions;
+            // Player has reached the end of the grid.
+            var gameWon = _playerPosition.positionX >= GridDimensions;
 
             if (gameWon)
             {
@@ -186,10 +185,10 @@
                 return;
             }
 
-            // Mine locations contains player location.
+            // Does mine locations contain player position.
             var mineHit = MineLocations.Contains(_playerPosition);
 
-            Console.WriteLine("Pressed " + movementDirection.ToArrowSymbol() + " Current position (" + _playerPosition.Item1 + ", " + _playerPosition.Item2 + ") - Lives " + Lives + " - Moves " + Moves);
+            Console.WriteLine("Pressed " + movementDirection.ToArrowSymbol() + " Current position (" + _playerPosition.positionX + ", " + _playerPosition.positionY + ") - Lives " + Lives + " - Moves " + Moves);
 
             if (mineHit)
             {
@@ -202,11 +201,12 @@
         /// </summary>
         private void LoseLife()
         {
-            Lives--;
-
             var message = "Oops you hit a mine and lost a life!";
 
-            if (Lives == 0)
+            // Remove a life.
+            Lives--;
+
+            if (Lives <= 0)
             {
                 GameOver = true;
                 Console.WriteLine(message);

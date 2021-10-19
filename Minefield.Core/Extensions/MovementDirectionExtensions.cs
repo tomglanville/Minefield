@@ -14,23 +14,14 @@ namespace Minefield.Core.Extensions
         /// <returns>Arrow symbol.</returns>
         public static string ToArrowSymbol(this MovementDirection md)
         {
-            switch (md)
+            return md switch
             {
-                case MovementDirection.Up:
-                    return "↑";
-
-                case MovementDirection.Down:
-                    return "↓";
-
-                case MovementDirection.Left:
-                    return "←";
-
-                case MovementDirection.Right:
-                    return "→";
-
-                default:
-                    return string.Empty;
-            }
+                MovementDirection.Up => "↑",
+                MovementDirection.Down => "↓",
+                MovementDirection.Left => "←",
+                MovementDirection.Right => "→",
+                _ => string.Empty,
+            };
         }
     }
 }
