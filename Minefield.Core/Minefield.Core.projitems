@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects Condition="'$(MSBuildVersion)' == '' Or '$(MSBuildVersion)' &lt; '16.0'">$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>8e86a43c-003c-4abc-af61-9410974ad1b7</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Minefield.Core</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)MinefieldApp.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\MovementDirectionExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\MovementDirection.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\DirectionParam.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\GridService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\IGridService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\MinefieldViewModel.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)ViewModels\" />
+  </ItemGroup>
+</Project>
