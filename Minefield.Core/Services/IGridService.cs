@@ -22,19 +22,29 @@
         void Setup(bool showMineLocations);
 
         /// <summary>
+        /// Player position.
+        /// </summary>
+        (int positionX, int positionY) PlayerPosition { get; }
+
+        /// <summary>
+        /// Indicates whether the game has finished.
+        /// </summary>
+        bool GameOver { get; }
+
+        /// <summary>
+        /// The number of moves.
+        /// </summary>
+        int Moves { get; }
+
+        /// <summary>
         /// Mine locations.
         /// </summary>
-        List<(int, int)> MineLocations { get; set; }
+        IList<(int mineX, int mineY)> MineLocations { get; set; }
 
         /// <summary>
         /// Player lives.
         /// </summary>
         int Lives { get; set; }
-
-        /// <summary>
-        /// The number of moves.
-        /// </summary>
-        public int Moves { get; }
 
         /// <summary>
         /// Number of rows and columns of the grid.
@@ -45,15 +55,5 @@
         /// How often mines appear as a percentage.
         /// </summary>
         int MineFrequencyPercentage { get; set; }
-
-        /// <summary>
-        /// Player position.
-        /// </summary>
-        (int, int) PlayerPosition { get; }
-
-        /// <summary>
-        /// Indicates whether the game has finished.
-        /// </summary>
-        bool GameOver { get; set; }
     }
 }

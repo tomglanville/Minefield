@@ -18,12 +18,13 @@
             GridService = gridService;
             MoveCommand = new DelegateCommand<DirectionParam>(Move);
 
-            // Custom difficulty settings.
+            // Set custom difficulty settings here.
             GridService.Lives = 3;
             GridService.GridDimensions = 8;
-            GridService.MineFrequencyPercentage = 15;
+            GridService.MineFrequencyPercentage = 10;
 
             // Setup grid.
+            // Toggle showMineLocations to show/hide hints here.
             GridService.Setup(showMineLocations: true);
         }
 

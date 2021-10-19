@@ -11,7 +11,7 @@
     public class GridService : IGridService
     {
         /// <summary>
-        /// The players current position coordinates.
+        /// The players current position.
         /// </summary>
         private (int positionX, int positionY) _playerPosition = (0, 0);
 
@@ -23,7 +23,7 @@
         /// <summary>
         /// Gets the player position.
         /// </summary>
-        public (int, int) PlayerPosition => _playerPosition;
+        public (int positionX, int positionY) PlayerPosition => _playerPosition;
 
         /// <summary>
         /// The number of moves.
@@ -41,9 +41,9 @@
         public int GridDimensions { get; set; }
 
         /// <summary>
-        /// List of mine location coordinates
+        /// List of mine locations.
         /// </summary>
-        public List<(int, int)> MineLocations { get; set; } = new List<(int mineX, int mineY)>();
+        public IList<(int mineX, int mineY)> MineLocations { get; set; } = new List<(int mineX, int mineY)>();
 
         /// <summary>
         /// Current number of lives.
@@ -72,6 +72,7 @@
         /// <param name="showMineLocations">Show mine location spoilers.</param>
         public void Setup(bool showMineLocations)
         {
+            Console.WriteLine("Starting game! Grid size " + GridDimensions + "x" + GridDimensions + " - Mine frequency " + MineFrequencyPercentage + "% - Lives:" + Lives);
             SetupMineLocations(showMineLocations);
         }
 
